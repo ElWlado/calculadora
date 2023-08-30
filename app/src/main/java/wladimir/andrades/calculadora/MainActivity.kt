@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-
     //Get and edit properties
     private fun setTextHistory(text: String){
         val txtHistory: TextView = findViewById(R.id.txtHistory)
@@ -67,22 +66,40 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Validation operation
+    private fun validateButtonPressAfterEq(){
+        if (this.validateTotal) {
+            when (this.operation){
+                "+", "-", "*", "/" -> {
+                    setTextHistory("")
+                    this.total = getTextValue().toInt()
+                    this.validateTotal = false
+                }
+                else -> resetCalculator()
+            }
+        }
+    }
+
     private fun validateTextOfTextValue(digit: String){
+        validateButtonPressAfterEq()
+
         when(getTextValue()){
-            "0", "Error"-> {
+            "0", "Error" -> {
                 setTextValue(digit)
                 desOrActButtons(true)
             }
-            else -> if (this.validateTotal) setTextValue(digit)
-            else setTextValue(getTextValue() + digit)
+            else ->
+                if (!this.definedOperation) setTextValue(digit)
+                else setTextValue(getTextValue() + digit)
         }
-        this.validateTotal = false
+
         this.definedOperation = true
     }
 
     private fun validateButtonPress(operation: String){
+        validateButtonPressAfterEq()
+
         if (getTextHistory().isNotBlank()){
-            if (definedOperation) setTextHistory(getTextHistory() + getTextValue() + operation)
+            if (this.definedOperation) setTextHistory(getTextHistory() + getTextValue() + operation)
             else{
                 when(getTextHistory().last()){
                     '0','1','2','3','4','5','6','7','8','9' -> setTextHistory(getTextHistory() + getTextValue() + operation)
@@ -96,8 +113,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         setTextValue(total.toString())
-        this.validateTotal = true
         this.definedOperation = false
+    }
+
+    private fun validatePerformOperation() {
+        if (operation.isNotBlank() && total != 0 && definedOperation) validateOperation()
     }
 
     private fun validateOperation(){
@@ -122,28 +142,28 @@ class MainActivity : AppCompatActivity() {
 
     //Operations buttons
     fun pressSum(view: View){
-        if (operation.isNotBlank() && total != 0) validateOperation()
+        validatePerformOperation()
 
         this.operation = "+"
         validateButtonPress(this.operation)
     }
 
     fun pressRes(view: View){
-        if (operation.isNotBlank() && total != 0) validateOperation()
+        validatePerformOperation()
 
         this.operation = "-"
         validateButtonPress(this.operation)
     }
 
-    fun pressMul(view: View){
-        if (operation.isNotBlank() && total != 0) validateOperation()
+    fun pressMul(view: View) {
+        validatePerformOperation()
 
         this.operation = "*"
         validateButtonPress(this.operation)
     }
 
     fun pressDiv(view: View){
-        if (operation.isNotBlank() && total != 0) validateOperation()
+        validatePerformOperation()
 
         this.operation = "/"
         validateButtonPress(this.operation)
@@ -153,14 +173,15 @@ class MainActivity : AppCompatActivity() {
         setTextHistory(getTextHistory() + getTextValue() + "=")
 
         validateOperation()
-
         setTextValue(this.total.toString())
         this.validateTotal = true
-        desOrActButtons(false)
+        this.operation = ""
     }
 
     //Special buttons
     fun pressDel(view: View){
+        validateButtonPressAfterEq()
+
         if (getTextValue().length == 1) setTextValue("0")
         else setTextValue(getTextValue().dropLast(1))
     }
@@ -170,6 +191,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun pressCE(view: View){
+        validateButtonPressAfterEq()
+
         setTextValue("0")
     }
 
