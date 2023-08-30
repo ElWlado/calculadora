@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
     private var total: Int = 0
     private var operation: String = ""
     private var validateTotal: Boolean = false
+    private var definedOperation: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun desOrActButtons(action: Boolean){
         val btnCE: Button = findViewById(R.id.btnCE)
-        val btnC: Button = findViewById(R.id.btnC)
         val btnDel: Button = findViewById(R.id.btnDel)
         val btnEq: Button = findViewById(R.id.btnEq)
         val btnSum: Button = findViewById(R.id.btnSum)
@@ -77,6 +77,27 @@ class MainActivity : AppCompatActivity() {
             else setTextValue(getTextValue() + digit)
         }
         this.validateTotal = false
+        this.definedOperation = true
+    }
+
+    private fun validateButtonPress(operation: String){
+        if (getTextHistory().isNotBlank()){
+            if (definedOperation) setTextHistory(getTextHistory() + getTextValue() + operation)
+            else{
+                when(getTextHistory().last()){
+                    '0','1','2','3','4','5','6','7','8','9' -> setTextHistory(getTextHistory() + getTextValue() + operation)
+                    '+', '-', '*', '/' -> setTextHistory(getTextHistory().dropLast(1) + operation)
+                }
+            }
+        }
+        else {
+            setTextHistory(getTextValue() + operation)
+            total = getTextValue().toInt()
+        }
+
+        setTextValue(total.toString())
+        this.validateTotal = true
+        this.definedOperation = false
     }
 
     private fun validateOperation(){
@@ -84,83 +105,58 @@ class MainActivity : AppCompatActivity() {
             "+" -> this.total += getTextValue().toInt()
             "-" -> this.total -= getTextValue().toInt()
             "*" -> this.total *= getTextValue().toInt()
-            "/" -> this.total /= getTextValue().toInt()
+            "/" -> validateDivideByZero()
+        }
+    }
+
+    private fun validateDivideByZero(){
+        if (getTextValue() == "0"){
+            setTextValue("Error")
+            desOrActButtons(false)
+            setTextHistory("")
+            this.total = 0
+            this.operation = ""
+            this.validateTotal = false
         }
     }
 
     //Operations buttons
     fun pressSum(view: View){
+        if (operation.isNotBlank() && total != 0) validateOperation()
+
         this.operation = "+"
-        if (getTextHistory().isNotBlank()){
-            when(getTextHistory().last()){
-                '0','1','2','3','4','5','6','7','8','9' -> setTextHistory(getTextHistory() + getTextValue() + operation)
-                '+', '-', '*', '/' -> setTextHistory(getTextHistory().dropLast(1) + operation)
-            }
-        }
-        else{
-            setTextHistory(getTextValue() + operation)
-        }
+        validateButtonPress(this.operation)
     }
 
     fun pressRes(view: View){
+        if (operation.isNotBlank() && total != 0) validateOperation()
+
         this.operation = "-"
-        if (getTextHistory().isNotBlank()){
-            when(getTextHistory().last()){
-                '0','1','2','3','4','5','6','7','8','9' -> setTextHistory(getTextHistory() + getTextValue() + operation)
-                '+', '-', '*', '/' -> setTextHistory(getTextHistory().dropLast(1) + operation)
-            }
-        }
-        else{
-            setTextHistory(getTextValue() + operation)
-        }
+        validateButtonPress(this.operation)
     }
 
     fun pressMul(view: View){
-        this.operation = "*"
-        if (getTextHistory().isNotBlank()){
-            when(getTextHistory().last()){
-                '0','1','2','3','4','5','6','7','8','9' -> {
-                    setTextHistory(getTextHistory() + getTextValue() + operation)
+        if (operation.isNotBlank() && total != 0) validateOperation()
 
-                }
-                '+', '-', '*', '/' -> setTextHistory(getTextHistory().dropLast(1) + operation)
-            }
-        }
-        else{
-            setTextHistory(getTextValue() + operation)
-        }
+        this.operation = "*"
+        validateButtonPress(this.operation)
     }
 
     fun pressDiv(view: View){
+        if (operation.isNotBlank() && total != 0) validateOperation()
+
         this.operation = "/"
-        if (getTextHistory().isNotBlank()){
-            when(getTextHistory().last()){
-                '0','1','2','3','4','5','6','7','8','9' -> setTextHistory(getTextHistory() + getTextValue() + operation)
-                '+', '-', '*', '/' -> setTextHistory(getTextHistory().dropLast(1) + operation)
-            }
-        }
-        else{
-            setTextHistory(getTextValue() + operation)
-        }
+        validateButtonPress(this.operation)
     }
 
     fun pressEqual(view: View){
         setTextHistory(getTextHistory() + getTextValue() + "=")
 
-        when (operation) {
-            "/" -> {
-                //validateDivideByZero("")
-                setTextValue(this.total.toString())
-                this.validateTotal = true
-                desOrActButtons(false)
-            }
-            else -> {
-                validateOperation()
-                setTextValue(this.total.toString())
-                this.validateTotal = true
-                desOrActButtons(false)
-            }
-        }
+        validateOperation()
+
+        setTextValue(this.total.toString())
+        this.validateTotal = true
+        desOrActButtons(false)
     }
 
     //Special buttons
