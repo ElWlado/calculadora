@@ -7,10 +7,13 @@ import android.widget.Button
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
-    private var total: Int = 0
+    private var total: Double = 0.0
     private var operation: String = ""
+    private var operationEq: String = ""
+    private var valueEq: String = ""
     private var validateTotal: Boolean = false
     private var definedOperation: Boolean = false
+    private var divideByZero: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetCalculator(){
-        this.total = 0
+        this.total = 0.0
         this.operation = ""
         this.validateTotal = false
 
@@ -71,7 +74,7 @@ class MainActivity : AppCompatActivity() {
             when (this.operation){
                 "+", "-", "*", "/" -> {
                     setTextHistory("")
-                    this.total = getTextValue().toInt()
+                    this.total = getTextValue().toDouble()
                     this.validateTotal = false
                 }
                 else -> resetCalculator()
@@ -95,49 +98,64 @@ class MainActivity : AppCompatActivity() {
         this.definedOperation = true
     }
 
-    private fun validateButtonPress(operation: String){
+    private fun validateButtonPress(){
         validateButtonPressAfterEq()
 
         if (getTextHistory().isNotBlank()){
-            if (this.definedOperation) setTextHistory(getTextHistory() + getTextValue() + operation)
+            if (this.definedOperation) setTextHistory(getTextHistory() + getTextValue() + this.operation)
             else{
                 when(getTextHistory().last()){
-                    '0','1','2','3','4','5','6','7','8','9' -> setTextHistory(getTextHistory() + getTextValue() + operation)
-                    '+', '-', '*', '/' -> setTextHistory(getTextHistory().dropLast(1) + operation)
+                    '0','1','2','3','4','5','6','7','8','9' -> setTextHistory(getTextHistory() + getTextValue() + this.operation)
+                    '+', '-', '*', '/' -> setTextHistory(getTextHistory().dropLast(1) + this.operation)
                 }
             }
         }
         else {
-            setTextHistory(getTextValue() + operation)
-            total = getTextValue().toInt()
+            setTextHistory(getTextValue() + this.operation)
+            this.total = getTextValue().toDouble()
         }
 
-        setTextValue(total.toString())
+        setTextValue(
+            if (this.total % 1 == .0) String.format("%.0f", this.total)
+            else this.total.toString()
+        )
+
+        validateDecimal()
         this.definedOperation = false
     }
 
-    private fun validatePerformOperation() {
-        if (operation.isNotBlank() && total != 0 && definedOperation) validateOperation()
+    private fun validateDecimal(){
+        setTextValue(
+            if (this.total % 1 == .0) String.format("%.0f", this.total)
+            else this.total.toString()
+        )
     }
 
-    private fun validateOperation(){
+    private fun validatePerformOperation() {
+        if (operation.isNotBlank() && total != 0.0 && definedOperation) validateOperation(getTextValue())
+        else if (operation == "/" && definedOperation) validateOperation(getTextValue())
+    }
+
+    private fun validateOperation(value: String){
         when(this.operation){
-            "+" -> this.total += getTextValue().toInt()
-            "-" -> this.total -= getTextValue().toInt()
-            "*" -> this.total *= getTextValue().toInt()
-            "/" -> validateDivideByZero()
+            "+" -> this.total += value.toDouble()
+            "-" -> this.total -= value.toDouble()
+            "*" -> this.total *= value.toDouble()
+            "/" -> validateDivideByZero(value)
         }
     }
 
-    private fun validateDivideByZero(){
-        if (getTextValue() == "0"){
-            setTextValue("Error")
+    private fun validateDivideByZero(value: String){
+        if (value == "0"){
             desOrActButtons(false)
             setTextHistory("")
-            this.total = 0
+
+            this.divideByZero = true
+            this.total = 0.0
             this.operation = ""
             this.validateTotal = false
         }
+        else this.total /= value.toDouble()
     }
 
     //Operations buttons
@@ -145,37 +163,56 @@ class MainActivity : AppCompatActivity() {
         validatePerformOperation()
 
         this.operation = "+"
-        validateButtonPress(this.operation)
+        validateButtonPress()
     }
 
     fun pressRes(view: View){
         validatePerformOperation()
 
         this.operation = "-"
-        validateButtonPress(this.operation)
+        validateButtonPress()
     }
 
     fun pressMul(view: View) {
         validatePerformOperation()
 
         this.operation = "*"
-        validateButtonPress(this.operation)
+        validateButtonPress()
     }
 
     fun pressDiv(view: View){
         validatePerformOperation()
 
-        this.operation = "/"
-        validateButtonPress(this.operation)
+        if (divideByZero) setTextValue("Error")
+        else{
+            this.operation = "/"
+            validateButtonPress()
+        }
+
+        this.divideByZero = false
     }
 
     fun pressEqual(view: View){
-        setTextHistory(getTextHistory() + getTextValue() + "=")
+        if (!validateTotal){
+            setTextHistory(getTextHistory() + getTextValue() + "=")
+            this.valueEq = getTextValue()
+            validateOperation(getTextValue())
 
-        validateOperation()
-        setTextValue(this.total.toString())
-        this.validateTotal = true
-        this.operation = ""
+            if (divideByZero) setTextValue("Error")
+            else validateDecimal()
+
+            this.divideByZero = false
+            this.validateTotal = true
+
+            this.operationEq = this.operation
+            this.operation = ""
+        }
+        else {
+            this.operation = this.operationEq
+            setTextHistory(this.total.toString() + this.operation + valueEq + "=")
+            validateOperation(this.valueEq)
+            validateDecimal()
+        }
     }
 
     //Special buttons
