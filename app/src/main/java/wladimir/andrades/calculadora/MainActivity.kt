@@ -4,19 +4,22 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.HorizontalScrollView
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
-    private var total: Int = 0
+    private var total: Double = 0.0
     private var operation: String = ""
+    private var operationEq: String = ""
+    private var valueEq: String = ""
     private var validateTotal: Boolean = false
     private var definedOperation: Boolean = false
+    private var divideByZero: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
-
 
     //Get and edit properties
     private fun setTextHistory(text: String){
@@ -58,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetCalculator(){
-        this.total = 0
+        this.total = 0.0
         this.operation = ""
         this.validateTotal = false
 
@@ -66,151 +69,231 @@ class MainActivity : AppCompatActivity() {
         setTextValue("0")
     }
 
+    private fun focusRightScroll(){
+        val hsvTxtHistory: HorizontalScrollView = findViewById(R.id.hsvTxtHistory)
+        val hsvTxtValue: HorizontalScrollView = findViewById(R.id.hsvTxtValue)
+
+        hsvTxtHistory.post {
+            hsvTxtHistory.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
+        }
+
+        hsvTxtValue.post {
+            hsvTxtValue.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
+        }
+    }
+
     //Validation operation
+    private fun validateButtonPressAfterEq(){
+        if (this.validateTotal) {
+            when (this.operation){
+                "+", "-", "*", "/" -> {
+                    setTextHistory("")
+                    this.total = getTextValue().toDouble()
+                    this.validateTotal = false
+                }
+                else -> resetCalculator()
+            }
+        }
+    }
+
     private fun validateTextOfTextValue(digit: String){
+        validateButtonPressAfterEq()
+
         when(getTextValue()){
-            "0", "Error"-> {
+            "0", "Error" -> {
                 setTextValue(digit)
                 desOrActButtons(true)
             }
-            else -> if (this.validateTotal) setTextValue(digit)
-            else setTextValue(getTextValue() + digit)
+            else ->
+                if (!this.definedOperation) setTextValue(digit)
+                else setTextValue(getTextValue() + digit)
         }
-        this.validateTotal = false
+
         this.definedOperation = true
     }
 
-    private fun validateButtonPress(operation: String){
+    private fun validateButtonPress(){
+        validateButtonPressAfterEq()
+
         if (getTextHistory().isNotBlank()){
-            if (definedOperation) setTextHistory(getTextHistory() + getTextValue() + operation)
+            if (this.definedOperation) {
+                setTextHistory(getTextHistory() + getTextValue() + this.operation)
+            }
             else{
                 when(getTextHistory().last()){
-                    '0','1','2','3','4','5','6','7','8','9' -> setTextHistory(getTextHistory() + getTextValue() + operation)
-                    '+', '-', '*', '/' -> setTextHistory(getTextHistory().dropLast(1) + operation)
+                    '0','1','2','3','4','5','6','7','8','9' -> {
+                        setTextHistory(getTextHistory() + getTextValue() + this.operation)
+                    }
+                    '+', '-', '*', '/' -> setTextHistory(getTextHistory().dropLast(1) + this.operation)
                 }
             }
         }
         else {
-            setTextHistory(getTextValue() + operation)
-            total = getTextValue().toInt()
+            setTextHistory(getTextValue() + this.operation)
+            this.total = getTextValue().toDouble()
         }
 
-        setTextValue(total.toString())
-        this.validateTotal = true
+        validateDecimal()
         this.definedOperation = false
+
+        focusRightScroll()
     }
 
-    private fun validateOperation(){
+    private fun validateDecimal(){
+        setTextValue(
+            if (this.total % 1 == .0) String.format("%.0f", this.total)
+            else this.total.toString()
+        )
+    }
+
+    private fun validatePerformOperation() {
+        if (operation.isNotBlank() && definedOperation) validateOperation(getTextValue())
+        else if (operation == "/" && definedOperation) validateOperation(getTextValue())
+    }
+
+    private fun validateOperation(value: String){
         when(this.operation){
-            "+" -> this.total += getTextValue().toInt()
-            "-" -> this.total -= getTextValue().toInt()
-            "*" -> this.total *= getTextValue().toInt()
-            "/" -> validateDivideByZero()
+            "+" -> this.total += value.toDouble()
+            "-" -> this.total -= value.toDouble()
+            "*" -> this.total *= value.toDouble()
+            "/" -> validateDivideByZero(value)
         }
     }
 
-    private fun validateDivideByZero(){
-        if (getTextValue() == "0"){
-            setTextValue("Error")
+    private fun validateDivideByZero(value: String){
+        if (value == "0"){
             desOrActButtons(false)
             setTextHistory("")
-            this.total = 0
+
+            this.divideByZero = true
+            this.total = 0.0
             this.operation = ""
             this.validateTotal = false
         }
+        else this.total /= value.toDouble()
     }
 
     //Operations buttons
-    fun pressSum(view: View){
-        if (operation.isNotBlank() && total != 0) validateOperation()
+    fun pressSum(@Suppress("UNUSED_PARAMETER") view: View){
+        validatePerformOperation()
 
         this.operation = "+"
-        validateButtonPress(this.operation)
+        validateButtonPress()
     }
 
-    fun pressRes(view: View){
-        if (operation.isNotBlank() && total != 0) validateOperation()
+    fun pressRes(@Suppress("UNUSED_PARAMETER") view: View){
+        validatePerformOperation()
 
         this.operation = "-"
-        validateButtonPress(this.operation)
+        validateButtonPress()
     }
 
-    fun pressMul(view: View){
-        if (operation.isNotBlank() && total != 0) validateOperation()
+    fun pressMul(@Suppress("UNUSED_PARAMETER") view: View) {
+        validatePerformOperation()
 
         this.operation = "*"
-        validateButtonPress(this.operation)
+        validateButtonPress()
     }
 
-    fun pressDiv(view: View){
-        if (operation.isNotBlank() && total != 0) validateOperation()
+    fun pressDiv(@Suppress("UNUSED_PARAMETER") view: View){
+        validatePerformOperation()
 
-        this.operation = "/"
-        validateButtonPress(this.operation)
+        if (divideByZero) setTextValue("Error")
+        else{
+            this.operation = "/"
+            validateButtonPress()
+        }
+
+        this.divideByZero = false
     }
 
-    fun pressEqual(view: View){
-        setTextHistory(getTextHistory() + getTextValue() + "=")
+    fun pressEqual(@Suppress("UNUSED_PARAMETER") view: View){
+        if (total == 0.0) total += getTextValue().toDouble()
 
-        validateOperation()
+        if (!validateTotal){
+            setTextHistory(getTextHistory() + getTextValue() + "=")
+            this.valueEq = getTextValue()
+            validateOperation(getTextValue())
 
-        setTextValue(this.total.toString())
-        this.validateTotal = true
-        desOrActButtons(false)
+            if (divideByZero) setTextValue("Error")
+            else validateDecimal()
+
+            this.divideByZero = false
+            this.validateTotal = true
+
+            this.operationEq = this.operation
+            this.operation = ""
+        }
+        else {
+            if (this.operationEq != ""){
+                this.operation = this.operationEq
+
+                setTextHistory((if (this.total % 1 == .0) String.format("%.0f", this.total)
+                else this.total.toString()) + this.operation + valueEq + "=")
+
+                validateOperation(this.valueEq)
+                validateDecimal()
+                focusRightScroll()
+            }
+        }
     }
 
     //Special buttons
-    fun pressDel(view: View){
+    fun pressDel(@Suppress("UNUSED_PARAMETER") view: View){
+        validateButtonPressAfterEq()
+
         if (getTextValue().length == 1) setTextValue("0")
         else setTextValue(getTextValue().dropLast(1))
     }
 
-    fun pressC(view: View){
+    fun pressC(@Suppress("UNUSED_PARAMETER") view: View){
         resetCalculator()
     }
 
-    fun pressCE(view: View){
+    fun pressCE(@Suppress("UNUSED_PARAMETER") view: View){
+        validateButtonPressAfterEq()
+
         setTextValue("0")
     }
 
     //Press digit
-    fun pressDigit1(view: View){
+    fun pressDigit1(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("1")
     }
 
-    fun pressDigit2(view: View){
+    fun pressDigit2(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("2")
     }
 
-    fun pressDigit3(view: View){
+    fun pressDigit3(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("3")
     }
 
-    fun pressDigit4(view: View){
+    fun pressDigit4(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("4")
     }
 
-    fun pressDigit5(view: View){
+    fun pressDigit5(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("5")
     }
 
-    fun pressDigit6(view: View){
+    fun pressDigit6(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("6")
     }
 
-    fun pressDigit7(view: View){
+    fun pressDigit7(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("7")
     }
 
-    fun pressDigit8(view: View){
+    fun pressDigit8(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("8")
     }
 
-    fun pressDigit9(view: View){
+    fun pressDigit9(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("9")
     }
 
-    fun pressDigit0(view: View){
+    fun pressDigit0(@Suppress("UNUSED_PARAMETER") view: View){
         validateTextOfTextValue("0")
     }
 }
