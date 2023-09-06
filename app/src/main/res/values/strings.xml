@@ -18,5 +18,6 @@
     <string name="mul">*</string>
     <string name="res">-</string>
     <string name="sum">+</string>
+    <string name="dot">.</string>
 
 </resources>
