@@ -208,8 +208,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun pressEqual(@Suppress("UNUSED_PARAMETER") view: View){
-        if (total == 0.0) total += getTextValue().toDouble()
-
         if (!validateTotal){
             setTextHistory(getTextHistory() + getTextValue() + "=")
             this.valueEq = getTextValue()
