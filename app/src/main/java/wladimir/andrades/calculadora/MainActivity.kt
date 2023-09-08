@@ -44,16 +44,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun desOrActButtons(action: Boolean){
-        val btnCE: Button = findViewById(R.id.btnCE)
-        val btnDel: Button = findViewById(R.id.btnDel)
         val btnEq: Button = findViewById(R.id.btnEq)
         val btnSum: Button = findViewById(R.id.btnSum)
         val btnRes: Button = findViewById(R.id.btnRes)
         val btnMul: Button = findViewById(R.id.btnMul)
         val btnDiv: Button = findViewById(R.id.btnDiv)
 
-        btnCE.isEnabled = action
-        btnDel.isEnabled = action
         btnEq.isEnabled = action
         btnSum.isEnabled = action
         btnRes.isEnabled = action
@@ -135,17 +131,16 @@ class MainActivity : AppCompatActivity() {
             this.total = getTextValue().toDouble()
         }
 
-        validateDecimal()
+        setTextValue(validateFormat())
+
         this.definedOperation = false
 
         focusRightScroll()
     }
 
-    private fun validateDecimal(){
-        setTextValue(
-            if (this.total % 1 == .0) String.format("%.0f", this.total)
-            else this.total.toString()
-        )
+    private fun validateFormat(): String{
+        return if (this.total % 1 == .0) String.format("%.0f", this.total)
+        else this.total.toString()
     }
 
     private fun validatePerformOperation() {
@@ -222,7 +217,7 @@ class MainActivity : AppCompatActivity() {
                 validateOperation(getTextValue())
 
                 if (divideByZero) setTextValue("Error")
-                else validateDecimal()
+                else setTextValue(validateFormat())
 
                 this.divideByZero = false
                 this.validateTotal = true
@@ -239,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                 else this.total.toString()) + this.operation + valueEq + "=")
 
                 validateOperation(this.valueEq)
-                validateDecimal()
+                setTextValue(validateFormat())
             }
         }
     }
@@ -247,6 +242,9 @@ class MainActivity : AppCompatActivity() {
     //Special buttons
     fun pressDel(@Suppress("UNUSED_PARAMETER") view: View){
         validateButtonPressAfterEq()
+        desOrActButtons(true)
+
+        if (getTextValue() == "Error") resetCalculator()
 
         if (getTextValue().length == 1) setTextValue("0")
         else setTextValue(getTextValue().dropLast(1))
@@ -254,11 +252,12 @@ class MainActivity : AppCompatActivity() {
 
     fun pressC(@Suppress("UNUSED_PARAMETER") view: View){
         resetCalculator()
+        desOrActButtons(true)
     }
 
     fun pressCE(@Suppress("UNUSED_PARAMETER") view: View){
         validateButtonPressAfterEq()
-
+        desOrActButtons(true)
         setTextValue("0")
     }
 
