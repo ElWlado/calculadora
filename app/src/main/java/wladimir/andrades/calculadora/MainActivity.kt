@@ -1,5 +1,6 @@
 package wladimir.andrades.calculadora
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -110,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         this.definedOperation = true
+        focusRightScroll()
     }
 
     private fun validateButtonPress(){
@@ -210,17 +212,24 @@ class MainActivity : AppCompatActivity() {
     fun pressEqual(@Suppress("UNUSED_PARAMETER") view: View){
         if (!validateTotal){
             setTextHistory(getTextHistory() + getTextValue() + "=")
-            this.valueEq = getTextValue()
-            validateOperation(getTextValue())
 
-            if (divideByZero) setTextValue("Error")
-            else validateDecimal()
+            if (operation.isBlank()) {
+                total = getTextValue().toDouble()
+                this.validateTotal = true
+            }
+            else{
+                this.valueEq = getTextValue()
+                validateOperation(getTextValue())
 
-            this.divideByZero = false
-            this.validateTotal = true
+                if (divideByZero) setTextValue("Error")
+                else validateDecimal()
 
-            this.operationEq = this.operation
-            this.operation = ""
+                this.divideByZero = false
+                this.validateTotal = true
+
+                this.operationEq = this.operation
+                this.operation = ""
+            }
         }
         else {
             if (this.operationEq != ""){
@@ -231,7 +240,6 @@ class MainActivity : AppCompatActivity() {
 
                 validateOperation(this.valueEq)
                 validateDecimal()
-                focusRightScroll()
             }
         }
     }
@@ -255,43 +263,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Press digit
-    fun pressDigit1(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("1")
-    }
-
-    fun pressDigit2(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("2")
-    }
-
-    fun pressDigit3(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("3")
-    }
-
-    fun pressDigit4(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("4")
-    }
-
-    fun pressDigit5(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("5")
-    }
-
-    fun pressDigit6(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("6")
-    }
-
-    fun pressDigit7(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("7")
-    }
-
-    fun pressDigit8(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("8")
-    }
-
-    fun pressDigit9(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("9")
-    }
-
-    fun pressDigit0(@Suppress("UNUSED_PARAMETER") view: View){
-        validateTextOfTextValue("0")
+    @SuppressLint("DiscouragedApi")
+    fun pressDigit(view: View){
+        for (i in 0 until 10) {
+            val viewId = resources.getIdentifier("btnDigit$i", "id", packageName)
+            when(view.id) { viewId -> validateTextOfTextValue(i.toString()) }
+        }
     }
 }

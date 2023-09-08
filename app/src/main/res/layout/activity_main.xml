@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/darkGray">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:layout_margin="4dp">
 
         <TableRow
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="60dp">
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -25,18 +25,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scrollHorizontally="true"
-                    android:textSize="34sp"
-                    android:layout_gravity="end"/>
+                    android:textSize="28sp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/white"/>
             </HorizontalScrollView>
         </TableRow>
 
         <TableRow
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="6dp">
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/hsvTxtValue"
-                android:layout_span="4">
+                android:layout_span="4" >
 
                 <TextView
                     android:id="@+id/txtValue"
@@ -44,193 +45,261 @@
                     android:layout_height="wrap_content"
                     android:scrollHorizontally="true"
                     android:text="@string/zero"
-                    android:textSize="48sp"
-                    android:layout_gravity="end" />
+                    android:textSize="58sp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/white"/>
             </HorizontalScrollView>
         </TableRow>
 
         <TableRow
-            android:layout_marginTop="24dp">
-            <Button
+            android:layout_marginTop="60dp"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <android.widget.Button
                 android:id="@+id/btnCE"
                 android:onClick="pressCE"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/CE" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/CE"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"
+                android:backgroundTint="@color/mediumDarkGray"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnC"
                 android:onClick="pressC"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/C" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/C"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"
+                android:backgroundTint="@color/mediumDarkGray"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnDel"
                 android:onClick="pressDel"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/del"
-                android:textSize="16sp" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:textSize="22sp"
+                android:background="@drawable/btn_del_bg" />
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnEq"
                 android:onClick="pressEqual"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/Eq" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/Eq"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"
+                android:backgroundTint="@color/lightBlue"/>
         </TableRow>
 
         <TableRow
-            android:layout_marginTop="24dp">
-            <Button
+            android:layout_marginTop="4dp"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <android.widget.Button
                 android:id="@+id/btnDigit1"
-                android:onClick="pressDigit1"
+                android:onClick="pressDigit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/digit1" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/digit1"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnDigit2"
-                android:onClick="pressDigit2"
+                android:onClick="pressDigit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/digit2" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/digit2"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnDigit3"
-                android:onClick="pressDigit3"
+                android:onClick="pressDigit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/digit3" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/digit3"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnSum"
                 android:onClick="pressSum"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/sum" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/sum"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"
+                android:backgroundTint="@color/mediumDarkGray"/>
         </TableRow>
 
         <TableRow
-            android:layout_marginTop="24dp">
-            <Button
+            android:layout_marginTop="4dp"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <android.widget.Button
                 android:id="@+id/btnDigit4"
-                android:onClick="pressDigit4"
+                android:onClick="pressDigit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/digit4" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/digit4"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnDigit5"
-                android:onClick="pressDigit5"
+                android:onClick="pressDigit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/digit5" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/digit5"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnDigit6"
-                android:onClick="pressDigit6"
+                android:onClick="pressDigit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/digit6" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/digit6"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnRes"
                 android:onClick="pressRes"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/res" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/res"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"
+                android:backgroundTint="@color/mediumDarkGray"/>
         </TableRow>
 
         <TableRow
-            android:layout_marginTop="24dp">
-            <Button
+            android:layout_marginTop="4dp"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <android.widget.Button
                 android:id="@+id/btnDigit7"
-                android:onClick="pressDigit7"
+                android:onClick="pressDigit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/digit7" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/digit7"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnDigit8"
-                android:onClick="pressDigit8"
+                android:onClick="pressDigit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/digit8" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/digit8"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnDigit9"
-                android:onClick="pressDigit9"
+                android:onClick="pressDigit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/digit9" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/digit9"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnMul"
                 android:onClick="pressMul"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="@string/mul" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="@string/mul"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"
+                android:backgroundTint="@color/mediumDarkGray"/>
 
         </TableRow>
 
         <TableRow
-            android:layout_height="131dp"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="4dp"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnDigit0"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_span="3"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:onClick="pressDigit0"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:onClick="pressDigit"
                 android:text="@string/zero"
-                tools:ignore="DuplicateSpeakableTextCheck" />
+                android:textSize="22sp"
+                tools:ignore="DuplicateSpeakableTextCheck"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"/>
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnDiv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_column="3"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
                 android:onClick="pressDiv"
-                android:text="@string/div" />
+                android:text="@string/div"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"
+                android:backgroundTint="@color/mediumDarkGray"/>
         </TableRow>
     </TableLayout>
 
