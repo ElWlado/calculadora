@@ -65,8 +65,7 @@
                 android:text="@string/CE"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"
-                android:backgroundTint="@color/mediumDarkGray"/>
+                android:background="@drawable/btn_special_bg" />
 
             <android.widget.Button
                 android:id="@+id/btnC"
@@ -78,8 +77,7 @@
                 android:text="@string/C"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"
-                android:backgroundTint="@color/mediumDarkGray"/>
+                android:background="@drawable/btn_special_bg" />
 
             <android.widget.Button
                 android:id="@+id/btnDel"
@@ -101,8 +99,7 @@
                 android:text="@string/Eq"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"
-                android:backgroundTint="@color/lightBlue"/>
+                android:background="@drawable/btn_eq_bg" />
         </TableRow>
 
         <TableRow
@@ -119,7 +116,7 @@
                 android:text="@string/digit1"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnDigit2"
@@ -131,7 +128,7 @@
                 android:text="@string/digit2"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnDigit3"
@@ -143,7 +140,7 @@
                 android:text="@string/digit3"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnSum"
@@ -155,8 +152,7 @@
                 android:text="@string/sum"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"
-                android:backgroundTint="@color/mediumDarkGray"/>
+                android:background="@drawable/btn_special_bg" />
         </TableRow>
 
         <TableRow
@@ -173,7 +169,7 @@
                 android:text="@string/digit4"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnDigit5"
@@ -185,7 +181,7 @@
                 android:text="@string/digit5"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnDigit6"
@@ -197,7 +193,7 @@
                 android:text="@string/digit6"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnRes"
@@ -209,8 +205,7 @@
                 android:text="@string/res"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"
-                android:backgroundTint="@color/mediumDarkGray"/>
+                android:background="@drawable/btn_special_bg" />
         </TableRow>
 
         <TableRow
@@ -227,7 +222,7 @@
                 android:text="@string/digit7"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnDigit8"
@@ -239,7 +234,7 @@
                 android:text="@string/digit8"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnDigit9"
@@ -251,7 +246,7 @@
                 android:text="@string/digit9"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnMul"
@@ -263,8 +258,7 @@
                 android:text="@string/mul"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"
-                android:backgroundTint="@color/mediumDarkGray"/>
+                android:background="@drawable/btn_special_bg" />
 
         </TableRow>
 
@@ -285,7 +279,7 @@
                 android:textSize="22sp"
                 tools:ignore="DuplicateSpeakableTextCheck"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"/>
+                android:background="@drawable/btn_digit_bg"/>
 
             <android.widget.Button
                 android:id="@+id/btnDiv"
@@ -298,8 +292,7 @@
                 android:text="@string/div"
                 android:textSize="22sp"
                 android:textColor="@color/white"
-                android:background="@drawable/btn_bg"
-                android:backgroundTint="@color/mediumDarkGray"/>
+                android:background="@drawable/btn_special_bg" />
         </TableRow>
     </TableLayout>
 
